@@ -1,0 +1,10 @@
+version: '2.1'
+
+services:
+  back:
+    image: back
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 8090:8090
