@@ -4,8 +4,7 @@ Welcome to the backend server for "Overexposure of Pets" app!
 
 
 #### Run project
-
+Install docker-compose and write:
 ```bash
-docker build .
-docker run -it -p 8090:8090 <image>
+docker-compose up
 ```
