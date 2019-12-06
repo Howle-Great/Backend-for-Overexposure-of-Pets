@@ -1,8 +1,24 @@
-version: '2.1'
+version: '3.1'
 
 services:
-  back:
-    image: back
+  golang:
     build: .
+    restart: always
     ports:
       - 8090:8090
+
+  postgres:
+    build: ./db
+    restart: always
+    environment: 
+      POSTGRES_PASSWORD: example
+    volumes:
+      - ./db/databases:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 6900:8080
