@@ -1,19 +1,19 @@
 version: '3.1'
 
 services:
-  golang:
-    build: .
-    restart: always
-    ports:
-      - 8090:8090
+  # golang:
+  #   build: .
+  #   restart: always
+  #   ports:
+  #     - 8090:8090 
 
   postgres:
     build: ./db
     restart: always
     environment: 
       POSTGRES_PASSWORD: example
-    volumes:
-      - ./db/databases:/var/lib/postgresql/data
+    # volumes:
+      # - ./db/base:/var/lib/postgresql/data
     ports:
       - 5432:5432
 

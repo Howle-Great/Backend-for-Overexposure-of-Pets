@@ -1,101 +1,38 @@
 package main
 
 import (
+	"log"
 	"net/http"
+	"time"
 )
 
-func HeandlerSignIn(w http.ResponseWriter, r *http.Request) {
-
+type Handler struct {
+	Items ItemRepository
+	Auth  AuthManager
 }
 
-func HeandlerSignUpUser(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) HeandlerSignInPost(w http.ResponseWriter, r *http.Request) {
+	r.ParseForm()
+	params := r.PostFormValue
+	nickname, password := params("nickname"), params("password")
+	log.Printf("Sign in: user: %s, password: %s", nickname, password)
 
-}
+	token, err := h.Auth.SignIn(&h.Items, &User{
+		Nickname: nickname,
+		Password: password,
+	})
 
-func HeandlerSignUpHotel(w http.ResponseWriter, r *http.Request) {
-
-}
-
-func HeandlerSignUpCompany(w http.ResponseWriter, r *http.Request) {
-
-}
-
-func HeandlerProfile(w http.ResponseWriter, r *http.Request) {
-
-}
-
-func HeandlerUsers(w http.ResponseWriter, r *http.Request) {
-
-}
-
-func HeandlerUser(w http.ResponseWriter, r *http.Request) {
-
-}
-
-func HeandlerUserDelete(w http.ResponseWriter, r *http.Request) {
-
-}
-
-func HeandlerUserCreate(w http.ResponseWriter, r *http.Request) {
-
-}
-
-func HeandlerUserEdit(w http.ResponseWriter, r *http.Request) {
-
-}
-
-func HeandlerHotels(w http.ResponseWriter, r *http.Request) {
-
-}
-
-func HeandlerHotel(w http.ResponseWriter, r *http.Request) {
-
-}
-
-func HeandlerHotelDelete(w http.ResponseWriter, r *http.Request) {
-
-}
-
-func HeandlerHotelCreate(w http.ResponseWriter, r *http.Request) {
-
-}
-
-func HeandlerHotelEdit(w http.ResponseWriter, r *http.Request) {
-
-}
-
-func HeandlerCompanis(w http.ResponseWriter, r *http.Request) {
-
-}
-
-func HeandlerCompany(w http.ResponseWriter, r *http.Request) {
-
-}
-
-func HeandlerCompanyDelete(w http.ResponseWriter, r *http.Request) {
-
-}
-
-func HeandlerCompanyCreate(w http.ResponseWriter, r *http.Request) {
-
-}
-
-func HeandlerCompanyEdit(w http.ResponseWriter, r *http.Request) {
-
-}
-
-func HandlerOrder(w http.ResponseWriter, r *http.Request) {
-
-}
-
-func HandlerOrderDelete(w http.ResponseWriter, r *http.Request) {
-
-}
-
-func HandlerOrderCreate(w http.ResponseWriter, r *http.Request) {
-
-}
-
-func HandlerOrderEdit(w http.ResponseWriter, r *http.Request) {
-
+	if err != nil {
+		w.WriteHeader(http.StatusUnauthorized)
+		w.Write([]byte(
+			"Access denied! Wrong nickname or password.",
+		))
+		return
+	}
+	cookie := &http.Cookie{
+		Name:    "token",
+		Value:   token,
+		Expires: time.Now().Add(1 * time.Hour),
+	}
+	http.SetCookie(w, cookie)
 }

@@ -6,5 +6,5 @@ RUN go get \
 COPY . /server
 WORKDIR /server
 EXPOSE 8090
-CMD go get .
+CMD go get .  
 CMD go run .
